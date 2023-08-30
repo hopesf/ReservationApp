@@ -1,16 +1,9 @@
-import React from "react";
+import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
+import { AuthStack, MainStack } from "./src/navigations/GlobalNavigation";
 
-// navigations
-import MainStack from "./navigation/MainStack";
-import AuthStack from "./navigation/AuthStack";
-
-const getIsSignedIn = () => {
-  return true;
-};
+const issignedIn = true;
 
 export default function App() {
-  const isSignedIn = getIsSignedIn();
-
-  return <NavigationContainer>{isSignedIn ? <MainStack /> : <AuthStack />}</NavigationContainer>;
+  return <NavigationContainer>{issignedIn ? <MainStack /> : <AuthStack />}</NavigationContainer>;
 }

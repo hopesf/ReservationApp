@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from "react-native";
 
-const LoginScreen = ({ navigation }) => {
+const LoginSc = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
-    // Bu kısımda login işlemleri yapılabilir
-
     // Örneğin, kullanıcı adı ve şifre kontrolü yapalım
     if (username === "selim" && password === "123") {
       navigation.replace("Home");
@@ -78,4 +76,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default LoginSc;

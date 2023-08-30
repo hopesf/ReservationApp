@@ -15,7 +15,9 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.reservationapp",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
