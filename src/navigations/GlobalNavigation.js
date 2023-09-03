@@ -10,9 +10,13 @@ import { RegisterSc, LoginSc, WelcomeSc } from "../screens/AuthSc";
 import { SimpleLineIcons, Fontisto, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 //  dashboard screens
-import { NewReservationSc, ReservationsSc, UserSc, HomeSc, SettingSc } from "../screens/DashboardSc";
+import { NewReservationSc, ReservationsSc, UserSc, HomeSc } from "../screens/DashboardSc";
+
+// settings screens
+import { MainSettingsSc, EditProfileSc } from "../screens/DashboardSc";
 
 const Stack = createNativeStackNavigator();
+const settingStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export const AuthStack = () => {
@@ -99,13 +103,19 @@ export const MainStack = () => {
       />
       <Tab.Screen
         name="Setting"
-        component={SettingSc}
         options={{
           tabBarIcon: ({ focused }) => {
             return <MaterialIcons name="settings" size={24} color={focused ? COLORS.primary : COLORS.black} />;
           },
         }}
-      />
+      >
+        {() => (
+          <settingStack.Navigator screenOptions={{ headerShown: false }}>
+            <settingStack.Screen name="MainSettings" component={MainSettingsSc} />
+            <settingStack.Screen name="EditProfile" component={EditProfileSc} />
+          </settingStack.Navigator>
+        )}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 };

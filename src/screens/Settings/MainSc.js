@@ -4,25 +4,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, FONTS } from "../../constants";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const SettingSc = ({ navigation }) => {
+const MainSettingsSc = ({ navigation }) => {
   const navigateToEditProfile = () => {
     navigation.navigate("EditProfile");
-  };
-
-  const navigateToSecurity = () => {
-    console.log("Security function");
-  };
-
-  const navigateToNotifications = () => {
-    console.log("Notifications function");
-  };
-
-  const navigateToPrivacy = () => {
-    console.log("Privacy function");
-  };
-
-  const navigateToSubscription = () => {
-    console.log("Subscription function");
   };
 
   const navigateToSupport = () => {
@@ -33,72 +17,24 @@ const SettingSc = ({ navigation }) => {
     console.log("Terms and Policies function");
   };
 
-  const navigateToFreeSpace = () => {
-    console.log("Free Space function");
-  };
-
-  const navigateToDateSaver = () => {
-    console.log("Date saver");
-  };
-
   const navigateToReportProblem = () => {
     console.log("Report a problem");
-  };
-
-  const addAccount = () => {
-    console.log("Aadd account ");
   };
 
   const logout = () => {
     console.log("Logout");
   };
 
-  const accountItems = [
-    {
-      icon: "person-outline",
-      text: "Edit Profile",
-      action: navigateToEditProfile,
-    },
-    { icon: "security", text: "Security", action: navigateToSecurity },
-    {
-      icon: "notifications-none",
-      text: "Notifications",
-      action: navigateToNotifications,
-    },
-    { icon: "lock-outline", text: "Privacy", action: navigateToPrivacy },
-  ];
+  const accountItems = [{ icon: "person-outline", text: "Profili Düzenle", action: navigateToEditProfile }];
 
   const supportItems = [
-    {
-      icon: "credit-card",
-      text: "My Subscription",
-      action: navigateToSubscription,
-    },
-    { icon: "help-outline", text: "Help & Support", action: navigateToSupport },
-    {
-      icon: "info-outline",
-      text: "Terms and Policies",
-      action: navigateToTermsAndPolicies,
-    },
-  ];
-
-  const cacheAndCellularItems = [
-    {
-      icon: "delete-outline",
-      text: "Free up space",
-      action: navigateToFreeSpace,
-    },
-    { icon: "save-alt", text: "Date Saver", action: navigateToDateSaver },
+    { icon: "help-outline", text: "Yardım", action: navigateToSupport },
+    { icon: "info-outline", text: "Kullanım Şartları ve Gizlilik Politikası", action: navigateToTermsAndPolicies },
   ];
 
   const actionsItems = [
-    {
-      icon: "outlined-flag",
-      text: "Report a problem",
-      action: navigateToReportProblem,
-    },
-    { icon: "people-outline", text: "Add Account", action: addAccount },
-    { icon: "logout", text: "Log out", action: logout },
+    { icon: "outlined-flag", text: "Bir Sorun Bildir", action: navigateToReportProblem },
+    { icon: "logout", text: "Oturumu Kapat", action: logout },
   ];
 
   const renderSettingsItem = ({ icon, text, action }) => (
@@ -128,18 +64,18 @@ const SettingSc = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
-      <View style={{ marginHorizontal: 12, flexDirection: "row", justifyContent: "center" }}>
+      <View style={{ marginHorizontal: 12, flexDirection: "row", justifyContent: "center", marginVertical: 12 }}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={{ position: "absolute", left: 0 }}>
           <MaterialIcons name="keyboard-arrow-left" size={24} color={COLORS.black} />
         </TouchableOpacity>
 
-        <Text style={{ ...FONTS.h3 }}>Settings</Text>
+        <Text style={{ ...FONTS.h3 }}>Ayarlar</Text>
       </View>
 
       <ScrollView style={{ marginHorizontal: 12 }}>
         {/* Account Settings */}
         <View style={{ marginBottom: 12 }}>
-          <Text style={{ ...FONTS.h4, marginVertical: 10 }}>Account</Text>
+          <Text style={{ ...FONTS.h4, marginVertical: 10 }}>Hesap</Text>
           <View style={{ borderRadius: 12, backgrounColor: COLORS.gray }}>
             {accountItems.map((item, index) => (
               <React.Fragment key={index}>{renderSettingsItem(item)}</React.Fragment>
@@ -150,19 +86,9 @@ const SettingSc = ({ navigation }) => {
         {/* Support and About settings */}
 
         <View style={{ marginBottom: 12 }}>
-          <Text style={{ ...FONTS.h4, marginVertical: 10 }}>Support & About </Text>
+          <Text style={{ ...FONTS.h4, marginVertical: 10 }}>Gizlilik & Destek </Text>
           <View style={{ borderRadius: 12, backgrounColor: COLORS.gray }}>
             {supportItems.map((item, index) => (
-              <React.Fragment key={index}>{renderSettingsItem(item)}</React.Fragment>
-            ))}
-          </View>
-        </View>
-
-        {/* Cache & Cellular */}
-        <View style={{ marginBottom: 12 }}>
-          <Text style={{ ...FONTS.h4, marginVertical: 10 }}>Cache & Cellular </Text>
-          <View style={{ borderRadius: 12, backgrounColor: COLORS.gray }}>
-            {cacheAndCellularItems.map((item, index) => (
               <React.Fragment key={index}>{renderSettingsItem(item)}</React.Fragment>
             ))}
           </View>
@@ -183,4 +109,4 @@ const SettingSc = ({ navigation }) => {
   );
 };
 
-export default SettingSc;
+export default MainSettingsSc;
