@@ -13,10 +13,9 @@ import { SimpleLineIcons, Fontisto, MaterialCommunityIcons, MaterialIcons } from
 import { NewReservationSc, ReservationsSc, UserSc, HomeSc } from "../screens/DashboardSc";
 
 // settings screens
-import { MainSettingsSc, EditProfileSc } from "../screens/DashboardSc";
+import { MainSettingsSc, EditProfileSc } from "../screens/Settings";
 
 const Stack = createNativeStackNavigator();
-const settingStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export const AuthStack = () => {
@@ -110,10 +109,10 @@ export const MainStack = () => {
         }}
       >
         {() => (
-          <settingStack.Navigator screenOptions={{ headerShown: false }}>
-            <settingStack.Screen name="MainSettings" component={MainSettingsSc} />
-            <settingStack.Screen name="EditProfile" component={EditProfileSc} />
-          </settingStack.Navigator>
+          <Stack.Navigator initialRouteName="MainSettings" screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="MainSettings" component={MainSettingsSc} />
+            <Stack.Screen name="EditProfile" component={EditProfileSc} />
+          </Stack.Navigator>
         )}
       </Tab.Screen>
     </Tab.Navigator>
