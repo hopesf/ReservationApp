@@ -3,12 +3,15 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { NavigationContainer } from "@react-navigation/native";
 import { AuthStack, MainStack } from "./src/navigations/GlobalNavigation";
+import { useAuth } from "./src/hooks/useAuth";
+
 
 SplashScreen.preventAutoHideAsync();
 
-const issignedIn = true;
 
 export default function App() {
+  const User = useAuth();
+
   const [fontsLoaded] = useFonts({
     black: require("./src/assets/fonts/Inter-Black.ttf"),
     bold: require("./src/assets/fonts/Inter-Bold.ttf"),
@@ -27,5 +30,5 @@ export default function App() {
     return null;
   }
 
-  return <NavigationContainer onReady={onLayoutRootView}>{issignedIn ? <MainStack /> : <AuthStack />}</NavigationContainer>;
+  return <NavigationContainer onReady={onLayoutRootView}>{User ? <MainStack /> : <AuthStack />}</NavigationContainer>;
 }
