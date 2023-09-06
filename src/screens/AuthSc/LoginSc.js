@@ -5,9 +5,13 @@ import COLORS from "../../constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
 import Button from "../../components/Button";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../config/firebase";
+import { useGlobal } from "../../context/GlobalContext";
 
 const LoginSc = ({ navigation }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(true);
+  const { setUser } = useGlobal();
   const [initialValues, setInitialValues] = useState({
     email: "",
     password: "",
@@ -15,11 +19,19 @@ const LoginSc = ({ navigation }) => {
 
   const handleSignIn = () => {
     // check validation
-    if (Object.values(initialValues).some((x) => x.length === 0)) {
-      return alert(`Boş alanları doldurunuz`);
-    }
+    if (Object.values(initialValues).some((x) => x.length === 0)) return alert(`Boş alanları doldurunuz`);
 
-    alert(initialValues.email + " " + initialValues.password);
+    signInWithEmailAndPassword(auth, initialValues.email, initialValues.password)
+      .then(({ user }) => {
+        setUser(user);
+        // burda userUid yi alacaz ve ilerde role göre sayfa render ettirecez.
+        // burada yapılması gereken setUser fonksiyonu ile user'ı set etmek.
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        alert(errorMessage, errorCode);
+      });
   };
 
   return (
