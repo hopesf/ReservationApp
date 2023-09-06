@@ -5,10 +5,53 @@ import COLORS from "../../constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
 import Button from "../../components/Button";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../config/firebase";
+import { createUser, updateUserUid } from "../../api";
 
 const RegisterSc = ({ navigation }) => {
-  const [isPasswordShown, setIsPasswordShown] = useState(false);
+  const [isPasswordShown, setIsPasswordShown] = useState(true);
   const [isChecked, setIsChecked] = useState(false);
+
+  const [initialFormState, setInitialFormState] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    areaCode: "+90",
+    phone: "",
+    password: "",
+  });
+
+  const handleRegisterBtn = async () => {
+    if (Object.values(initialFormState).some((x) => x.length === 0)) {
+      return alert(`Boş alanları doldurunuz`);
+    }
+
+    try {
+      const { data } = await createUser({
+        firstName: initialFormState.firstName,
+        lastName: initialFormState.lastName,
+        email: initialFormState.email,
+        phone: initialFormState.phone,
+      });
+
+      if (data) {
+        const { user } = await createUserWithEmailAndPassword(auth, initialFormState.email, initialFormState.password);
+        if (user.uid) {
+          // update user db
+          const { data: sonuc } = await updateUserUid({ userUid: user.uid, email: initialFormState.email });
+          console.log(sonuc);
+          alert(sonuc ? `Kayıt başarılı` : "Kayıt başarısız");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      // const errorCode = error.code;
+      // const errorMessage = error.message;
+
+      // alert(errorMessage, errorCode);
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -17,25 +60,6 @@ const RegisterSc = ({ navigation }) => {
         <View style={{ marginVertical: 22 }}>
           <Text style={{ fontSize: 22, fontWeight: "bold", marginVertical: 12, color: COLORS.black }}>Hesap Oluştur</Text>
           <Text style={{ fontSize: 16, color: COLORS.black }}>Bugün kolayca randevunu oluştur!</Text>
-        </View>
-        {/* kullanıcı adı */}
-        <View style={{ marginBottom: 12 }}>
-          <Text style={{ fontSize: 16, fontWeight: 400, marginVertical: 8 }}>Kullanıcı Adı</Text>
-
-          <View
-            style={{
-              width: "100%",
-              height: 48,
-              borderColor: COLORS.black,
-              borderWidth: 1,
-              borderRadius: 8,
-              alignItems: "center",
-              justifyContent: "center",
-              paddingLeft: 22,
-            }}
-          >
-            <TextInput placeholder="Kullanıcı adınızı giriniz" placeholderTextColor={COLORS.black} keyboardType="default" style={{ width: "100%" }} />
-          </View>
         </View>
 
         {/* isim */}
@@ -54,7 +78,14 @@ const RegisterSc = ({ navigation }) => {
               paddingLeft: 22,
             }}
           >
-            <TextInput placeholder="Adınızı giriniz" placeholderTextColor={COLORS.black} keyboardType="default" style={{ width: "100%" }} />
+            <TextInput
+              value={initialFormState.firstName}
+              onChangeText={(e) => setInitialFormState({ ...initialFormState, firstName: e })}
+              placeholder="Adınızı giriniz"
+              placeholderTextColor={COLORS.black}
+              keyboardType="default"
+              style={{ width: "100%" }}
+            />
           </View>
         </View>
 
@@ -74,7 +105,14 @@ const RegisterSc = ({ navigation }) => {
               paddingLeft: 22,
             }}
           >
-            <TextInput placeholder="Soyadınızı giriniz" placeholderTextColor={COLORS.black} keyboardType="default" style={{ width: "100%" }} />
+            <TextInput
+              value={initialFormState.lastName}
+              onChangeText={(e) => setInitialFormState({ ...initialFormState, lastName: e })}
+              placeholder="Soyadınızı giriniz"
+              placeholderTextColor={COLORS.black}
+              keyboardType="default"
+              style={{ width: "100%" }}
+            />
           </View>
         </View>
 
@@ -97,6 +135,7 @@ const RegisterSc = ({ navigation }) => {
             <TextInput
               placeholder="Mail adresinizi giriniz"
               placeholderTextColor={COLORS.black}
+              onChangeText={(e) => setInitialFormState({ ...initialFormState, email: e })}
               keyboardType="email-address"
               style={{ width: "100%" }}
             />
@@ -122,12 +161,23 @@ const RegisterSc = ({ navigation }) => {
           >
             <TextInput
               placeholder="+90"
+              value={initialFormState.phoneStart}
+              onChangeText={(e) => setInitialFormState({ ...initialFormState, areaCode: e })}
               placeholderTextColor={COLORS.black}
+              maxLength={3}
               keyboardType="numeric"
               style={{ width: "12%", borderRightWidth: 1, borderLeftColor: COLORS.grey, height: "100%" }}
             />
 
-            <TextInput placeholder="Telefon numaranızı giriniz" placeholderTextColor={COLORS.black} keyboardType="numeric" style={{ width: "80%" }} />
+            <TextInput
+              value={initialFormState.phone}
+              maxLength={10}
+              onChangeText={(e) => setInitialFormState({ ...initialFormState, phone: e })}
+              placeholder="Telefon numaranızı giriniz"
+              placeholderTextColor={COLORS.black}
+              keyboardType="numeric"
+              style={{ width: "80%" }}
+            />
           </View>
         </View>
 
@@ -148,6 +198,8 @@ const RegisterSc = ({ navigation }) => {
             }}
           >
             <TextInput
+              value={initialFormState.password}
+              onChangeText={(e) => setInitialFormState({ ...initialFormState, password: e })}
               placeholder="Şifrenizi giriniz"
               placeholderTextColor={COLORS.black}
               secureTextEntry={isPasswordShown}
@@ -170,7 +222,7 @@ const RegisterSc = ({ navigation }) => {
           <Text>Üyelik sözleşmesini kabul ediyorum</Text>
         </View>
 
-        <Button title="Kayıt Ol" filled style={{ marginTop: 18, marginBottom: 4 }} />
+        <Button onPress={handleRegisterBtn} title="Kayıt Ol" filled style={{ marginTop: 18, marginBottom: 4 }} />
 
         <View style={{ flexDirection: "row", justifyContent: "center", marginVertical: 22 }}>
           <Text style={{ fontSize: 16, color: COLORS.black }}>Zaten hesabın var mı ?</Text>

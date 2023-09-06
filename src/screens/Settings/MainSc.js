@@ -3,6 +3,8 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, FONTS } from "../../constants";
 import { MaterialIcons } from "@expo/vector-icons";
+import { signOut } from "firebase/auth";
+import { auth } from "../../config/firebase";
 
 const MainSettingsSc = ({ navigation }) => {
   const navigateToEditProfile = () => {
@@ -22,7 +24,7 @@ const MainSettingsSc = ({ navigation }) => {
   };
 
   const logout = () => {
-    console.log("Logout");
+    signOut(auth);
   };
 
   const accountItems = [{ icon: "person-outline", text: "Profili Düzenle", action: navigateToEditProfile }];
