@@ -1,16 +1,24 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { NavigationContainer } from "@react-navigation/native";
 import { AuthStack, MainStack } from "./src/navigations/GlobalNavigation";
-import { useAuth } from "./src/hooks/useAuth";
-
+import { auth } from "./src/config/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 SplashScreen.preventAutoHideAsync();
 
-
 export default function App() {
-  const User = useAuth();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      console.log("USER IS STILL LOGGED IN: ", user);
+      if (user) {
+        setUser(user);
+      }
+    });
+  }, [user]);
 
   const [fontsLoaded] = useFonts({
     black: require("./src/assets/fonts/Inter-Black.ttf"),
@@ -30,5 +38,5 @@ export default function App() {
     return null;
   }
 
-  return <NavigationContainer onReady={onLayoutRootView}>{User ? <MainStack /> : <AuthStack />}</NavigationContainer>;
+  return <NavigationContainer onReady={onLayoutRootView}>{user ? <MainStack /> : <AuthStack />}</NavigationContainer>;
 }

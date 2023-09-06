@@ -35,15 +35,7 @@ export const MainStack = () => {
         tabBarShowLabel: false,
         headerShown: false,
         tabBarHideOnKeyboard: true,
-        tabBarStyle: {
-          position: "absolute",
-          bottom: 0,
-          right: 0,
-          left: 0,
-          elevation: 0,
-          height: 60,
-          backgroundColor: COLORS.white,
-        },
+        tabBarStyle: { position: "absolute", bottom: 0, right: 0, left: 0, elevation: 0, height: 60, backgroundColor: COLORS.white },
       }}
     >
       <Tab.Screen
