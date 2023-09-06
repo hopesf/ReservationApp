@@ -1,17 +1,17 @@
-import { View, Text, Image, Pressable, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, Pressable, TextInput, TouchableOpacity } from "react-native";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import COLORS from "../../constants/colors";
 import { Ionicons } from "@expo/vector-icons";
-import Checkbox from "expo-checkbox";
-import Button from "../../components/Button";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../config/firebase";
+
+// other imports
 import { createUser, updateUserUid } from "../../api";
+import { auth } from "../../config/firebase";
+import COLORS from "../../constants/colors";
+import Button from "../../components/Button";
 
 const RegisterSc = ({ navigation }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(true);
-  const [isChecked, setIsChecked] = useState(false);
 
   const [initialFormState, setInitialFormState] = useState({
     firstName: "",
@@ -45,11 +45,10 @@ const RegisterSc = ({ navigation }) => {
         }
       }
     } catch (error) {
-      console.log(error);
-      // const errorCode = error.code;
-      // const errorMessage = error.message;
+      const errorCode = error.code;
+      const errorMessage = error.message;
 
-      // alert(errorMessage, errorCode);
+      alert(errorMessage, errorCode);
     }
   };
 
@@ -216,15 +215,9 @@ const RegisterSc = ({ navigation }) => {
           </View>
         </View>
 
-        {/* sözleşme */}
-        <View style={{ flexDirection: "row", marginVertical: 6 }}>
-          <Checkbox style={{ marginRight: 8 }} value={isChecked} onValueChange={setIsChecked} color={isChecked ? COLORS.primary : undefined} />
-          <Text>Üyelik sözleşmesini kabul ediyorum</Text>
-        </View>
+        <Button onPress={handleRegisterBtn} title="Kayıt Ol" filled style={{ marginTop: 12, marginBottom: 4 }} />
 
-        <Button onPress={handleRegisterBtn} title="Kayıt Ol" filled style={{ marginTop: 18, marginBottom: 4 }} />
-
-        <View style={{ flexDirection: "row", justifyContent: "center", marginVertical: 22 }}>
+        <View style={{ flexDirection: "row", justifyContent: "center", marginVertical: 12 }}>
           <Text style={{ fontSize: 16, color: COLORS.black }}>Zaten hesabın var mı ?</Text>
 
           <Pressable onPress={() => navigation.navigate("Login")}>

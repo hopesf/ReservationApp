@@ -7,20 +7,31 @@ import Checkbox from "expo-checkbox";
 import Button from "../../components/Button";
 
 const LoginSc = ({ navigation }) => {
-  const [isPasswordShown, setIsPasswordShown] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
+  const [isPasswordShown, setIsPasswordShown] = useState(true);
+  const [initialValues, setInitialValues] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleSignIn = () => {
+    // check validation
+    if (Object.values(initialValues).some((x) => x.length === 0)) {
+      return alert(`Boş alanları doldurunuz`);
+    }
+
+    alert(initialValues.email + " " + initialValues.password);
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <View style={{ flex: 1, marginHorizontal: 22 }}>
         <View style={{ marginVertical: 22 }}>
           <Text style={{ fontSize: 22, fontWeight: "bold", marginVertical: 12, color: COLORS.black }}>Tekrar Hoşgeldin ! 👋</Text>
-          <Text style={{ fontSize: 16, color: COLORS.black }}>Merhaba seni özledik!</Text>
+          <Text style={{ fontSize: 16, color: COLORS.black }}>Haydi giriş yapalım 😊</Text>
         </View>
 
         <View style={{ marginBottom: 12 }}>
-          <Text style={{ fontSize: 16, fontWeight: 400, marginVertical: 8 }}>Kullanıcı Adı</Text>
-
+          <Text style={{ fontSize: 16, fontWeight: 400, marginVertical: 8 }}>E-Mail</Text>
           <View
             style={{
               width: "100%",
@@ -34,7 +45,9 @@ const LoginSc = ({ navigation }) => {
             }}
           >
             <TextInput
-              placeholder="Kullanıcı adınızı giriniz"
+              placeholder="Mail adresinizi giriniz"
+              value={initialValues.email}
+              onChangeText={(e) => setInitialValues({ ...initialValues, email: e })}
               placeholderTextColor={COLORS.black}
               keyboardType="email-address"
               style={{ width: "100%" }}
@@ -59,6 +72,8 @@ const LoginSc = ({ navigation }) => {
           >
             <TextInput
               placeholder="Şifrenizi giriniz"
+              value={initialValues.password}
+              onChangeText={(e) => setInitialValues({ ...initialValues, password: e })}
               placeholderTextColor={COLORS.black}
               secureTextEntry={isPasswordShown}
               style={{ width: "100%" }}
@@ -74,17 +89,12 @@ const LoginSc = ({ navigation }) => {
           </View>
         </View>
 
-        <View style={{ flexDirection: "row", marginVertical: 6 }}>
-          <Checkbox style={{ marginRight: 8 }} value={isChecked} onValueChange={setIsChecked} color={isChecked ? COLORS.primary : undefined} />
-          <Text>Beni Hatırla</Text>
-        </View>
+        <Button onPress={handleSignIn} title="Giriş Yap" filled style={{ marginTop: 18, marginBottom: 4 }} />
 
-        <Button title="Giriş Yap" filled style={{ marginTop: 18, marginBottom: 4 }} />
-
-        <View style={{ flexDirection: "row", justifyContent: "center", marginVertical: 22 }}>
+        <View style={{ flexDirection: "col", alignItems: "center", justifyContent: "center", marginVertical: 22 }}>
           <Text style={{ fontSize: 16, color: COLORS.black }}>Henüz hesabın yok mu ? </Text>
           <Pressable onPress={() => navigation.navigate("Register")}>
-            <Text style={{ fontSize: 16, color: COLORS.primary, fontWeight: "bold", marginLeft: 6 }}>Kayıt Ol</Text>
+            <Text style={{ fontSize: 16, color: COLORS.primary, fontWeight: "bold", marginTop: 10 }}>Kayıt Ol</Text>
           </Pressable>
         </View>
       </View>
