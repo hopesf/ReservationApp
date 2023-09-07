@@ -10,13 +10,12 @@ import { getUser } from "./api";
 
 export default function Main() {
   const [initialState, setInitialState] = useState(true);
-  const { user, setUser } = useGlobal();
+  const { user, setUser, loading } = useGlobal();
 
   useEffect(() => {
     const loadUser = async () => {
       onAuthStateChanged(auth, async (authUser) => {
         if (authUser) {
-          console.log(authUser.uid);
           const userData = await getUser(authUser.uid);
           setUser(userData);
         } else {
@@ -29,7 +28,7 @@ export default function Main() {
     loadUser();
   }, [user]);
 
-  if (initialState) {
+  if (initialState || loading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" color={COLORS.primary} />

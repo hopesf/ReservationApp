@@ -5,13 +5,13 @@ import COLORS from "../../constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
 import Button from "../../components/Button";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../config/firebase";
 import { useGlobal } from "../../context/GlobalContext";
 
 const LoginSc = ({ navigation }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(true);
-  const { setUser } = useGlobal();
+  const { setUser, setLoading } = useGlobal();
   const [initialValues, setInitialValues] = useState({
     email: "",
     password: "",
@@ -21,15 +21,36 @@ const LoginSc = ({ navigation }) => {
     // check validation
     if (Object.values(initialValues).some((x) => x.length === 0)) return alert(`Boş alanları doldurunuz`);
 
+    setLoading(true);
     signInWithEmailAndPassword(auth, initialValues.email, initialValues.password)
       .then(({ user }) => {
         setUser(user);
+        setLoading(false);
         // burda userUid yi alacaz ve ilerde role göre sayfa render ettirecez.
         // burada yapılması gereken setUser fonksiyonu ile user'ı set etmek.
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        setLoading(false);
+        alert(errorMessage, errorCode);
+      });
+  };
+
+  const handleForgotPasword = () => {
+    // eğer email yoksa alert verilecek. varsa mail gönderilecek.
+    if (!initialValues.email.length > 0) return alert(`Lütfen mail adresinizi giriniz sonra tekrar deneyebilirsiniz`);
+    setLoading(true);
+
+    sendPasswordResetEmail(auth, initialValues.email)
+      .then(() => {
+        setLoading(false);
+        alert(`Şifre sıfırlama maili gönderildi`);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setLoading(false);
         alert(errorMessage, errorCode);
       });
   };
@@ -99,6 +120,13 @@ const LoginSc = ({ navigation }) => {
               )}
             </TouchableOpacity>
           </View>
+        </View>
+
+        {/* şifremi unuttum butonu */}
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-end", marginHorizontal: 10 }}>
+          <Pressable onPress={handleForgotPasword}>
+            <Text style={{ fontSize: 14, color: COLORS.primary, fontWeight: "bold" }}>Şifremi Unuttum</Text>
+          </Pressable>
         </View>
 
         <Button onPress={handleSignIn} title="Giriş Yap" filled style={{ marginTop: 18, marginBottom: 4 }} />

@@ -9,9 +9,11 @@ import { createUser, updateUserUid } from "../../api";
 import { auth } from "../../config/firebase";
 import COLORS from "../../constants/colors";
 import Button from "../../components/Button";
+import { useGlobal } from "../../context/GlobalContext";
 
 const RegisterSc = ({ navigation }) => {
   const [isPasswordShown, setIsPasswordShown] = useState(true);
+  const { setLoading } = useGlobal();
 
   const [initialFormState, setInitialFormState] = useState({
     firstName: "",
@@ -28,6 +30,7 @@ const RegisterSc = ({ navigation }) => {
     }
 
     try {
+      setLoading(true);
       const { data } = await createUser({
         firstName: initialFormState.firstName,
         lastName: initialFormState.lastName,
@@ -40,14 +43,14 @@ const RegisterSc = ({ navigation }) => {
         if (user.uid) {
           // update user db
           const { data: sonuc } = await updateUserUid({ userUid: user.uid, email: initialFormState.email });
-          console.log(sonuc);
+          setLoading(false);
           alert(sonuc ? `Kayıt başarılı` : "Kayıt başarısız");
         }
       }
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
-
+      setLoading(false);
       alert(errorMessage, errorCode);
     }
   };

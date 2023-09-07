@@ -7,6 +7,7 @@ export const useGlobal = () => useContext(GlobalContext);
 
 export const GlobalProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  return <GlobalContext.Provider value={{ user, setUser }}>{children}</GlobalContext.Provider>;
+  return <GlobalContext.Provider value={{ user, setUser, loading, setLoading }}>{children}</GlobalContext.Provider>;
 };
